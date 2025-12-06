@@ -4,11 +4,902 @@
   <meta charset="UTF-8" />
   <title>Разработка материалов для преподавателей английского</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Весь HTML-код сайта здесь. Вставлен полностью по запросу. -->
-  <!-- Ты можешь редактировать прямо в канвасе. -->
+
+  <!-- Подключаем лаконичный шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Основные цвета — можно поменять здесь */
+      --bg-color: #0f172a;        /* темный фон */
+      --card-bg: #0b1220;        /* фон карточек */
+      --accent: #f97316;         /* яркий оранжевый */
+      --accent-soft: rgba(249, 115, 22, 0.15);
+      --accent-2: #22c55e;       /* яркий зеленый */
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(148, 163, 184, 0.4);
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.8);
+      --radius-lg: 20px;
+      --transition-fast: 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(248, 250, 252, 0.08);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    header h1 {
+      font-size: clamp(26px, 3vw, 32px);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      position: relative;
+      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.06), transparent 55%);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(248, 250, 252, 0.04), transparent 55%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(249, 115, 22, 0.4);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.9);
+    }
+
+    .card-image {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      aspect-ratio: 16 / 10;
+      background: #020617;
+    }
+
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.02);
+      transition: transform var(--transition-fast), opacity var(--transition-fast);
+      opacity: 0.98;
+    }
+
+    .card:hover .card-image img {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    .pill {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      flex-grow: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--accent-2);
+    }
+
+    .format {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #fb923c);
+      color: #0b1020;
+      box-shadow: 0 12px 25px rgba(249, 115, 22, 0.42);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(249, 115, 22, 0.5);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    /* --- МОДАЛЬНОЕ ОКНО --- */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 40;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #020617;
+      border-radius: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.9);
+      max-width: 900px;
+      width: 100%;
+      max-height: 95vh;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (max-width: 780px) {
+      .modal {
+        grid-template-columns: 1fr;
+        max-height: 96vh;
+      }
+    }
+
+    .modal-left {
+      border-right: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at top, rgba(248, 250, 252, 0.06), #020617 60%);
+      padding: 16px;
+    }
+
+    .modal-right {
+      padding: 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      z-index: 2;
+    }
+
+    .modal-close:hover {
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    /* --- Карусель --- */
+
+    .carousel {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .carousel-viewport {
+      position: relative;
+      flex-grow: 1;
+      min-height: 220px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: #020617;
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carousel-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .carousel-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.5);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, width 0.2s ease;
+    }
+
+    .dot.active {
+      background: var(--accent);
+      transform: translateY(-1px);
+      width: 14px;
+    }
+
+    .carousel-arrows {
+      display: flex;
+      gap: 6px;
+    }
+
+    .arrow-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .arrow-btn:hover {
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    /* --- Контент модалки --- */
+
+    .modal-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .modal-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-2);
+      margin-bottom: 4px;
+    }
+
+    .modal-format {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .modal-description {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .modal-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .modal-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-footer small {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      opacity: 0.9;
+    }
+  </style>
 </head>
 <body>
-  <!-- Сюда нужно вставить полный HTML-код сайта, который я сгенерировал выше. -->
-  <!-- Чтобы избежать обрезания сообщения, скажи: "Вставь код полностью" — и я автоматически размещу весь HTML внутри этого файла. -->
+  <div class="page">
+    <header>
+      <div class="badge">
+        <span>Digital ELT Studio</span>
+        <span>для преподавателей английского</span>
+      </div>
+      <h1>Разработка материалов для преподавателей английского</h1>
+      <p>
+        Индивидуальные уроки, пакеты и курсы под ваши задачи: уровень, возраст, навыки, ESP-направление.
+        Все материалы готовы к использованию онлайн и офлайн.
+      </p>
+    </header>
+
+    <main>
+      <section class="grid">
+        <!-- КАРТОЧКА 1 -->
+        <article class="card">
+          <div class="card-image">
+            <!-- СЮДА ВСТАВЬ ФАЙЛ КАРТИНКИ ДЛЯ ПЕРВОГО ТОВАРА -->
+            <img src="card1.jpeg" alt="Разработка урока по индивидуальному запросу">
+            <div class="pill">1 урок</div>
+          </div>
+          <h2 class="card-title">Разработка урока по индивидуальному запросу</h2>
+          <p class="card-desc">
+            Один готовый урок под ваши задачи: уровень, возраст, цели ученика, профнаправление.
+          </p>
+          <div class="card-meta">
+            <span class="price">1 000 ₽</span>
+            <span class="format">Формат: PDF / DOCX / PPTX / Miro / Holst</span>
+          </div>
+          <div class="card-actions">
+            <!-- Кнопка "Подробнее" открывает модальное окно -->
+            <button class="btn btn-ghost" data-open-modal="product1">Подробнее</button>
+
+            <!-- Кнопка "Купить" ведет на вашу VK-страницу -->
+            <!-- Если захочешь менять ссылку — просто поменяй href -->
+            <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+              Купить
+            </a>
+          </div>
+        </article>
+
+        <!-- КАРТОЧКА 2 -->
+        <article class="card">
+          <div class="card-image">
+            <!-- СЮДА ВСТАВЬ ФАЙЛ КАРТИНКИ ДЛЯ ВТОРОГО ТОВАРА -->
+            <img src="card2.jpeg" alt="Разработка пакета из 8 уроков">
+            <div class="pill">8 уроков</div>
+          </div>
+          <h2 class="card-title">Разработка пакета уроков (8 занятий)</h2>
+          <p class="card-desc">
+            Пакет из восьми логично выстроенных уроков под ваш курс, группу или индивидуальных студентов.
+          </p>
+          <div class="card-meta">
+            <span class="price">8 000 ₽</span>
+            <span class="format">Формат: PDF / DOCX / PPTX / Miro / Holst</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-ghost" data-open-modal="product2">Подробнее</button>
+            <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+              Купить
+            </a>
+          </div>
+        </article>
+
+        <!-- КАРТОЧКА 3 -->
+        <article class="card">
+          <div class="card-image">
+            <!-- СЮДА ВСТАВЬ ФАЙЛ КАРТИНКИ ДЛЯ ТРЕТЬЕГО ТОВАРА -->
+            <img src="card3.jpeg" alt="Разработка курса">
+            <div class="pill">20–30 уроков</div>
+          </div>
+          <h2 class="card-title">Разработка курса (20–30 уроков)</h2>
+          <p class="card-desc">
+            Полноценный курс под ваши цели и методику преподавания: от коммуникативного до flipped classroom.
+          </p>
+          <div class="card-meta">
+            <span class="price">15 000 ₽</span>
+            <span class="format">Формат: PDF / DOCX / PPTX / Miro / Holst</span>
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-ghost" data-open-modal="product3">Подробнее</button>
+            <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+              Купить
+            </a>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <!-- МОДАЛКА ДЛЯ ТОВАРА 1 -->
+    <div class="modal-backdrop" id="product1">
+      <div class="modal">
+        <button class="modal-close" data-close-modal>&times;</button>
+        <div class="modal-left">
+          <div class="carousel" data-carousel>
+            <!--
+              ЕСЛИ ХОЧЕШЬ НЕСКОЛЬКО КАРТИНОК В КАРУСЕЛИ ДЛЯ ПЕРВОГО ТОВАРА:
+              - продублируй блок .carousel-slide
+              - замени src на card1-2.jpeg, card1-3.jpeg и т.д.
+            -->
+            <div class="carousel-viewport">
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="card1.jpeg" alt="Разработка урока по индивидуальному запросу">
+                </div>
+                <!-- ПРИМЕР ДОП.СЛАЙДА:
+                <div class="carousel-slide">
+                  <img src="card1-2.jpeg" alt="Дополнительная иллюстрация к уроку">
+                </div>
+                -->
+              </div>
+            </div>
+            <div class="carousel-nav">
+              <div class="carousel-dots">
+                <!--
+                  КОЛИЧЕСТВО ТОЧЕК-ДОТОВ ДОЛЖНО СОВПАДАТЬ С КОЛИЧЕСТВОМ .carousel-slide
+                  Если добавишь еще слайды, добавь сюда дополнительные <button class="dot"></button>
+                -->
+                <button class="dot active" data-dot="0"></button>
+              </div>
+              <div class="carousel-arrows">
+                <button class="arrow-btn" data-prev>&larr;</button>
+                <button class="arrow-btn" data-next>&rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-right">
+          <div>
+            <div class="modal-tag">
+              <span>Индивидуальная разработка</span>
+            </div>
+            <h2 class="modal-title">Разработка урока по индивидуальному запросу</h2>
+            <div class="modal-price">1 000 ₽</div>
+            <div class="modal-format">Формат: PDF / DOCX / PPTX / онлайн на Miro / Holst</div>
+          </div>
+
+          <p class="modal-description">
+            Я разрабатываю один полноформатный урок «под ключ» под ваши задачи:
+            учитываю уровень ученика, возраст, цели (экзамен, разговорный, академический),
+            а также профессиональную направленность (ESP).
+          </p>
+          <p class="modal-description">
+            В урок могут входить: слайды, рабочий лист, дополнительные упражнения,
+            домашнее задание и рекомендации по проведению занятия.
+          </p>
+          <p class="modal-note">
+            После оплаты и брифа срок разработки — в среднем 3–5 рабочих дней (индивидуально обсуждается).
+          </p>
+
+          <div class="modal-footer">
+            <small>Связаться и обсудить запрос вы можете через личные сообщения VK.</small>
+            <div class="modal-buttons">
+              <button class="btn btn-secondary" data-close-modal>Закрыть</button>
+              <!-- Кнопка Купить в модалке — та же ссылка на VK -->
+              <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+                Купить
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ДЛЯ ТОВАРА 2 -->
+    <div class="modal-backdrop" id="product2">
+      <div class="modal">
+        <button class="modal-close" data-close-modal>&times;</button>
+        <div class="modal-left">
+          <div class="carousel" data-carousel>
+            <div class="carousel-viewport">
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="card2.jpeg" alt="Разработка пакета из 8 уроков">
+                </div>
+                <!-- ДОБАВЬ ДОП.KARTINKI ЗДЕСЬ (card2-2.jpeg и т.д.), если нужно -->
+              </div>
+            </div>
+            <div class="carousel-nav">
+              <div class="carousel-dots">
+                <button class="dot active" data-dot="0"></button>
+              </div>
+              <div class="carousel-arrows">
+                <button class="arrow-btn" data-prev>&larr;</button>
+                <button class="arrow-btn" data-next>&rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-right">
+          <div>
+            <div class="modal-tag">
+              <span>Мини-курс / блок</span>
+            </div>
+            <h2 class="modal-title">Разработка пакета уроков (8 занятий)</h2>
+            <div class="modal-price">8 000 ₽</div>
+            <div class="modal-format">Формат: PDF / DOCX / PPTX / онлайн на Miro / Holst</div>
+          </div>
+
+          <p class="modal-description">
+            В пакет входят восемь логично выстроенных уроков, объединенных одной целью:
+            подготовка к экзамену, разговорный курс, ESP-направление или другая ваша задача.
+          </p>
+          <p class="modal-description">
+            Структуру и наполнение курса мы согласуем по брифу: типы заданий, фокус на навыках,
+            объем домашки, дополнительные материалы (игры, проекты, тесты).
+          </p>
+          <p class="modal-note">
+            Пакет удобно использовать как готовый мини-курс для одного студента или группы.
+          </p>
+
+          <div class="modal-footer">
+            <small>Точные сроки и формат материалов уточняются при первом контакте.</small>
+            <div class="modal-buttons">
+              <button class="btn btn-secondary" data-close-modal>Закрыть</button>
+              <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+                Купить
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- МОДАЛКА ДЛЯ ТОВАРА 3 -->
+    <div class="modal-backdrop" id="product3">
+      <div class="modal">
+        <button class="modal-close" data-close-modal>&times;</button>
+        <div class="modal-left">
+          <div class="carousel" data-carousel>
+            <div class="carousel-viewport">
+              <div class="carousel-track">
+                <div class="carousel-slide">
+                  <img src="card3.jpeg" alt="Разработка курса (20–30 уроков)">
+                </div>
+                <!-- ДОПОЛНИТЕЛЬНЫЕ СЛАЙДЫ ДЛЯ КУРСА (card3-2.jpeg и т.д.) МОЖНО ДОБАВИТЬ ЗДЕСЬ -->
+              </div>
+            </div>
+            <div class="carousel-nav">
+              <div class="carousel-dots">
+                <button class="dot active" data-dot="0"></button>
+              </div>
+              <div class="carousel-arrows">
+                <button class="arrow-btn" data-prev>&larr;</button>
+                <button class="arrow-btn" data-next>&rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-right">
+          <div>
+            <div class="modal-tag">
+              <span>Полноценный курс</span>
+            </div>
+            <h2 class="modal-title">Разработка курса (20–30 уроков)</h2>
+            <div class="modal-price">15 000 ₽</div>
+            <div class="modal-format">
+              Формат: PDF / DOCX / PPTX / онлайн на Miro / Holst
+            </div>
+          </div>
+
+          <p class="modal-description">
+            Я разрабатываю для вас цельный курс из 20–30 уроков под конкретный запрос:
+            школьный или вузовский курс, корпоративный тренинг, ESP, разговорный или смешанный формат.
+          </p>
+          <p class="modal-description">
+            Возможные подходы: communicative, lexical, flipped classroom, skill-based
+            (или гибрид по согласованию). В курс могут входить: диагностические и итоговые задания,
+            проекты, игры, чек-листы, шпаргалки для студентов и подробные комментарии для преподавателя.
+          </p>
+          <p class="modal-note">
+            Структура, ритм курса и методические акценты обсуждаются на этапе брифа и согласования программы.
+          </p>
+
+          <div class="modal-footer">
+            <small>Подходит для долгосрочных программ и авторских курсов.</small>
+            <div class="modal-buttons">
+              <button class="btn btn-secondary" data-close-modal>Закрыть</button>
+              <a class="btn btn-primary" href="https://vk.com/milochkamari" target="_blank" rel="noopener">
+                Купить
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      © <!-- Можно заменить на своё имя/бренд --> Digital ELT Studio ·
+      материалы для преподавателей английского
+    </footer>
+  </div>
+
+  <script>
+    // -----------------------
+    // ЛОГИКА МОДАЛЬНЫХ ОКОН
+    // -----------------------
+
+    // Находим все триггеры открытия модалок
+    const openButtons = document.querySelectorAll("[data-open-modal]");
+    const closeButtons = document.querySelectorAll("[data-close-modal]");
+    const backdrops = document.querySelectorAll(".modal-backdrop");
+
+    openButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-open-modal");
+        const modal = document.getElementById(id);
+        if (modal) {
+          modal.classList.add("active");
+          // Опционально блокируем прокрутку фона
+          document.body.style.overflow = "hidden";
+        }
+      });
+    });
+
+    // Закрытие по кнопкам "Закрыть" и крестику
+    closeButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const backdrop = btn.closest(".modal-backdrop");
+        if (backdrop) {
+          backdrop.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+    });
+
+    // Закрытие при клике по фону вокруг модалки
+    backdrops.forEach((backdrop) => {
+      backdrop.addEventListener("click", (e) => {
+        if (e.target === backdrop) {
+          backdrop.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+    });
+
+    // Закрытие по Esc
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document.querySelectorAll(".modal-backdrop.active").forEach((m) => {
+          m.classList.remove("active");
+        });
+        document.body.style.overflow = "";
+      }
+    });
+
+    // ---------------
+    // ЛОГИКА КАРУСЕЛИ
+    // ---------------
+    // Для каждой карусели внутри модалки — своя логика
+    document.querySelectorAll("[data-carousel]").forEach((carousel) => {
+      const track = carousel.querySelector(".carousel-track");
+      const slides = Array.from(carousel.querySelectorAll(".carousel-slide"));
+      const dots = Array.from(carousel.querySelectorAll(".dot"));
+      const prevBtn = carousel.querySelector("[data-prev]");
+      const nextBtn = carousel.querySelector("[data-next]");
+
+      let currentIndex = 0;
+
+      function updateCarousel(index) {
+        if (!slides.length) return;
+        // следим, чтобы индекс не выходил за границы
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        currentIndex = index;
+
+        const offset = -index * 100;
+        track.style.transform = `translateX(${offset}%)`;
+
+        // обновляем активный dot
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("active", i === index);
+        });
+      }
+
+      // Навешиваем обработчики на стрелки
+      if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+          updateCarousel(currentIndex - 1);
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+          updateCarousel(currentIndex + 1);
+        });
+      }
+
+      // Навешиваем обработчики на точки
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          updateCarousel(index);
+        });
+      });
+
+      // Стартовое положение — первый слайд
+      updateCarousel(0);
+    });
+  </script>
 </body>
 </html>
